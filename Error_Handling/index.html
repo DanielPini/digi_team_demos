@@ -8,9 +8,12 @@
       content="A webpage to demonstrate the use of developer tools for the RJ Digi team."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://some-url.com" />
-    <meta property="og:title" content="Some Title" />
-    <meta property="og:img" content="/assets/kitty.webp" />
+    <meta
+      property="og:url"
+      content="https://danielpini.github.io/digi_team_demos/Error_Handling"
+    />
+    <meta property="og:title" content="Error Handling" />
+    <meta property="og:img" content="../assets/kitty.webp" />
     <link rel="stylesheet" href="../style.css" />
     <link
       rel="shortcut icon"
@@ -25,7 +28,7 @@
       <p>Check the Browser Console (F12) to see the logic path!</p>
     </div>
     <main class="container">
-      <button style="margin-bottom: 1.5rem" onclick="window.location = '/'">
+      <button style="margin-bottom: 1.5rem" onclick="window.location = '../'">
         ← Home
       </button>
       <form class="step">
@@ -108,7 +111,7 @@
         );
         const kitty = document.createElement("img");
         // Using a placeholder service so the code works immediately for you
-        kitty.setAttribute("src", "/assets/kitty.webp");
+        kitty.setAttribute("src", "../assets/kitty.webp");
         kitty.classList.add("kitty");
         document.body.append(kitty);
       }

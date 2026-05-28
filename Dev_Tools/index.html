@@ -8,9 +8,12 @@
       content="A webpage to demonstrate the use of developer tools for the RJ Digi team."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://some-url.com" />
-    <meta property="og:title" content="Some Title" />
-    <meta property="og:img" content="/assets/kitty.webp" />
+    <meta
+      property="og:url"
+      content="https://danielpini.github.io/digi_team_demos/Dev_Tools"
+    />
+    <meta property="og:title" content="Dev Tools" />
+    <meta property="og:img" content="../assets/kitty.webp" />
     <link rel="stylesheet" href="../style.css" />
     <link
       rel="shortcut icon"
@@ -26,7 +29,7 @@
     </div>
 
     <div class="container">
-      <button style="margin-bottom: 1.5rem" onclick="window.location = '/'">
+      <button style="margin-bottom: 1.5rem" onclick="window.location = '../'">
         ← Home
       </button>
       <!-- STEP 1: ELEMENTS -->
@@ -139,7 +142,7 @@
         container.innerHTML = ""; // Clear previous
 
         const kitty = document.createElement("img");
-        kitty.src = "/assets/kitty.webp"; // This triggers a Network request
+        kitty.src = "../assets/kitty.webp"; // This triggers a Network request
         kitty.alt = "A cute kitty";
 
         kitty.onload = () => console.log("Kitty loaded successfully!");
