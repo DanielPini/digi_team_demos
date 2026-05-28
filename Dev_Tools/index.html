@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A webpage to demonstrate the use of developer tools for the RJ Digi team."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://some-url.com" />
+    <meta property="og:title" content="Some Title" />
+    <meta property="og:img" content="/assets/kitty.webp" />
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="shortcut icon"
+      href='data:image/svg+xml;utf8,&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"&gt; &lt;style&gt; rect { fill: %231A1A1A; stroke: %231A1A1A; stroke-width: 3px; } @media (prefers-color-scheme: dark) { rect { stroke: %231A1A1A; } } &lt;/style&gt; &lt;rect x="1.5" y="1.5" width="32" height="32" rx="6" ry="6"/&gt; &lt;/svg&gt;'
+      type="image/x-icon"
+    />
+    <title>DevTools Interactive Lab</title>
+  </head>
+  <body>
+    <div class="header">
+      <h1>DevTools Masterclass</h1>
+      <p>Follow the steps below with your Console open!</p>
+    </div>
+
+    <div class="container">
+      <button style="margin-bottom: 1.5rem" onclick="window.location = '/'">
+        ← Home
+      </button>
+      <!-- STEP 1: ELEMENTS -->
+      <div class="step" id="step-1">
+        <h2>1. The Elements Tab (The Skeleton)</h2>
+        <p>
+          The "Elements" tab shows the DOM
+          <a
+            target="_blank"
+            href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model"
+            >(Document Object Model)</a
+          >. It's the live version of your HTML.
+        </p>
+        <p>
+          <strong>Action:</strong> Right-click the button below and select
+          <strong>"Inspect"</strong>. Try changing the text color of this button
+          in the "Styles" pane on the right!
+        </p>
+        <button id="inspect-me">Inspect My Styles</button>
+      </div>
+
+      <!-- STEP 2: CONSOLE -->
+      <div class="step">
+        <h2>2. The Console (The Brain)</h2>
+        <p>
+          The "Console" is where we talk to the computer. You can see logs and
+          run code live.
+        </p>
+        <p>
+          <strong>Action:</strong> Click the button to send a message to the
+          console. Notice the blue file name (e.g.,
+          <code>index.html:105</code>)—that tells you exactly which line sent
+          the message!
+        </p>
+        <button onclick="console.log('Hello World from the button!')">
+          Say Hello
+        </button>
+      </div>
+
+      <!-- STEP 3: ERRORS -->
+      <div class="step">
+        <h2>3. Reading Errors (The Red Alerts)</h2>
+        <p>
+          Errors aren't failures; they are roadmaps and descriptors. They tell
+          you
+          <strong>What</strong> went wrong and <strong>Where</strong>.
+        </p>
+        <p>
+          <strong>Action:</strong> Click the button below. It will trigger a
+          "ReferenceError". Look for the red text in the console and click the
+          link on the right to see the broken line.
+        </p>
+        <button onclick="triggerError()">Break Something</button>
+      </div>
+
+      <!-- STEP 4: DEBUGGER -->
+      <div class="step">
+        <h2>4. The Debugger (The Time Machine)</h2>
+        <p>The "Sources" tab lets you pause time using <em>Breakpoints</em>.</p>
+        <p>
+          <strong>Action:</strong> Click the button. The code will
+          <strong>pause</strong> mid-execution. You can then hover over the
+          variable <code>secretMessage</code> in your DevTools to see its value!
+        </p>
+        <button id="debug-btn">Start Time Travel</button>
+      </div>
+
+      <!-- STEP 5: NETWORK -->
+      <div class="step">
+        <h2>5. The Network Tab (The Fetcher)</h2>
+        <p>
+          The "Network" tab shows every file being downloaded (images, scripts,
+          data).
+        </p>
+        <p>
+          <strong>Action:</strong> Open the <strong>Network</strong> tab, then
+          click the button. You will see <code>kitty.webp</code> pop up in the
+          list as it downloads!
+        </p>
+        <button id="fetch-kitty">Fetch the Kitty</button>
+        <div id="kitty-container"></div>
+      </div>
+    </div>
+
+    <script>
+      // For Step 3
+      function triggerError() {
+        console.log("About to trigger an error...");
+        // This variable doesn't exist!
+        const result = nonExistentVariable + 10;
+      }
+
+      // For Step 4
+      document.getElementById("debug-btn").addEventListener("click", () => {
+        const secretMessage = "You caught me!";
+        console.log("Checking the debugger...");
+
+        // The 'debugger' keyword forces the browser to pause if DevTools is open
+        debugger;
+
+        alert(
+          "Check your Sources tab! The code is paused on the 'debugger' line.",
+        );
+      });
+
+      // For Step 5
+      document.getElementById("fetch-kitty").addEventListener("click", () => {
+        const container = document.getElementById("kitty-container");
+        container.innerHTML = ""; // Clear previous
+
+        const kitty = document.createElement("img");
+        kitty.src = "/assets/kitty.webp"; // This triggers a Network request
+        kitty.alt = "A cute kitty";
+
+        kitty.onload = () => console.log("Kitty loaded successfully!");
+        kitty.onerror = () => {
+          console.error(
+            "%cLine !: Network Error!",
+            "color: red; font-weight: bold;",
+          );
+          console.log("%c FLOW: [Request] ──┐", "color: red;");
+          console.log(
+            "%c                 └─▶ [File Not Found (404)]",
+            "color: red;",
+          );
+          alert(
+            "Check the Network Tab! kitty.webp failed to load because it's missing locally.",
+          );
+        };
+
+        container.appendChild(kitty);
+      });
+
+      console.log("--- Lab Initialized ---");
+      console.log("Tip: Press Esc while in DevTools to toggle a mini-console!");
+    </script>
+  </body>
+</html>

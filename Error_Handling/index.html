@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A webpage to demonstrate the use of developer tools for the RJ Digi team."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://some-url.com" />
+    <meta property="og:title" content="Some Title" />
+    <meta property="og:img" content="/assets/kitty.webp" />
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="shortcut icon"
+      href='data:image/svg+xml;utf8,&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"&gt; &lt;style&gt; rect { fill: %231A1A1A; stroke: %231A1A1A; stroke-width: 3px; } @media (prefers-color-scheme: dark) { rect { stroke: %231A1A1A; } } &lt;/style&gt; &lt;rect x="1.5" y="1.5" width="32" height="32" rx="6" ry="6"/&gt; &lt;/svg&gt;'
+      type="image/x-icon"
+    />
+    <title>JS Flow Control: Handled vs Unhandled</title>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Try/Catch Flow</h1>
+      <p>Check the Browser Console (F12) to see the logic path!</p>
+    </div>
+    <main class="container">
+      <button style="margin-bottom: 1.5rem" onclick="window.location = '/'">
+        ← Home
+      </button>
+      <form class="step">
+        <div class="controls">
+          <label for="numInput">Enter JSON or a Number:</label>
+          <input
+            type="text"
+            id="numInput"
+            placeholder='e.g. {"val":1} or fail'
+          />
+        </div>
+
+        <div class="controls">
+          <input type="checkbox" id="handleError" checked />
+          <label for="handleError"
+            ><strong>Enable "Catch" Block</strong> (Handle errors
+            gracefully)</label
+          >
+        </div>
+
+        <input type="submit" value="Run Code" />
+      </form>
+    </main>
+    <script>
+      const form = document.querySelector("form");
+      const numInput = document.querySelector("#numInput");
+      const handleCheckbox = document.querySelector("#handleError");
+
+      numInput.addEventListener("input", () => {
+        document.querySelectorAll(".kitty").forEach((k) => k.remove());
+      });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const useCatch = handleCheckbox.checked;
+
+        if (useCatch) {
+          dodgyCodeHandled(numInput.value);
+        } else {
+          dodgyCodeUnhandled(numInput.value);
+        }
+      });
+
+      // VERSION A: The code with handling
+      function dodgyCodeHandled(arg) {
+        console.log("\n--- [MODE: HANDLED] ---");
+        try {
+          console.log("Line 1: Try Block Start");
+          const data = JSON.parse(arg);
+          console.log("Line 2: Success!");
+        } catch (error) {
+          console.log(
+            "%cLine !: EXCEPTION! ──┐",
+            "color: red; font-weight: bold;",
+          );
+          console.log("%c               └─▶ [catch block]", "color: red;");
+          console.error("Error swallowed:", error.message);
+        }
+
+        renderSuccessKitty();
+      }
+
+      // VERSION B: The code without handling
+      function dodgyCodeUnhandled(arg) {
+        console.log("\n--- [MODE: UNHANDLED] ---");
+        console.log("Line 1: No Try/Catch used.");
+
+        // If this fails, EVERYTHING below it in this script stops.
+        const data = JSON.parse(arg);
+
+        console.log("Line 2: Success (This won't show if it crashes)");
+        renderSuccessKitty();
+      }
+
+      function renderSuccessKitty() {
+        console.log(
+          "%cLine 3: Reached end of function! Rendering Kitty...",
+          "color: green; font-weight: bold;",
+        );
+        const kitty = document.createElement("img");
+        // Using a placeholder service so the code works immediately for you
+        kitty.setAttribute("src", "/assets/kitty.webp");
+        kitty.classList.add("kitty");
+        document.body.append(kitty);
+      }
+
+      console.log("Setup complete. Toggle the checkbox to see the difference!");
+    </script>
+  </body>
+</html>
