@@ -13,7 +13,7 @@
       content="https://danielpini.github.io/digi_team_demos/Error_Handling"
     />
     <meta property="og:title" content="Error Handling" />
-    <meta property="og:img" content="../assets/kitty.webp" />
+    <meta property="og:img" content="../assets/attila.jpg" />
     <link rel="stylesheet" href="../style.css" />
     <link
       rel="shortcut icon"
@@ -59,7 +59,7 @@
       const handleCheckbox = document.querySelector("#handleError");
 
       numInput.addEventListener("input", () => {
-        document.querySelectorAll(".kitty").forEach((k) => k.remove());
+        document.querySelectorAll(".puppy").forEach((p) => p.remove());
       });
 
       form.addEventListener("submit", (e) => {
@@ -89,7 +89,7 @@
           console.error("Error swallowed:", error.message);
         }
 
-        renderSuccessKitty();
+        renderSuccessPuppy();
       }
 
       // VERSION B: The code without handling
@@ -101,19 +101,19 @@
         const data = JSON.parse(arg);
 
         console.log("Line 2: Success (This won't show if it crashes)");
-        renderSuccessKitty();
+        renderSuccessPuppy();
       }
 
-      function renderSuccessKitty() {
+      function renderSuccessPuppy() {
         console.log(
-          "%cLine 3: Reached end of function! Rendering Kitty...",
+          "%cLine 3: Reached end of function! Rendering Puppy...",
           "color: green; font-weight: bold;",
         );
-        const kitty = document.createElement("img");
+        const puppy = document.createElement("img");
         // Using a placeholder service so the code works immediately for you
-        kitty.setAttribute("src", "../assets/kitty.webp");
-        kitty.classList.add("kitty");
-        document.body.append(kitty);
+        puppy.setAttribute("src", "../assets/attila.jpg");
+        puppy.classList.add("puppy");
+        document.body.append(puppy);
       }
 
       console.log("Setup complete. Toggle the checkbox to see the difference!");

@@ -13,7 +13,7 @@
       content="https://danielpini.github.io/digi_team_demos/Dev_Tools"
     />
     <meta property="og:title" content="Dev Tools" />
-    <meta property="og:img" content="../assets/kitty.webp" />
+    <meta property="og:img" content="../assets/attila.jpg" />
     <link rel="stylesheet" href="../style.css" />
     <link
       rel="shortcut icon"
@@ -106,11 +106,11 @@
         </p>
         <p>
           <strong>Action:</strong> Open the <strong>Network</strong> tab, then
-          click the button. You will see <code>kitty.webp</code> pop up in the
+          click the button. You will see <code>attila.jpg</code> pop up in the
           list as it downloads!
         </p>
-        <button id="fetch-kitty">Fetch the Kitty</button>
-        <div id="kitty-container"></div>
+        <button id="fetch-puppy">Fetch the puppy</button>
+        <div id="puppy-container"></div>
       </div>
     </div>
     <footer style="text-align: center"><p>&copy;2026 Daniel Pini</p></footer>
@@ -137,16 +137,16 @@
       });
 
       // For Step 5
-      document.getElementById("fetch-kitty").addEventListener("click", () => {
-        const container = document.getElementById("kitty-container");
+      document.getElementById("fetch-puppy").addEventListener("click", () => {
+        const container = document.getElementById("puppy-container");
         container.innerHTML = ""; // Clear previous
 
-        const kitty = document.createElement("img");
-        kitty.src = "../assets/kitty.webp"; // This triggers a Network request
-        kitty.alt = "A cute kitty";
+        const puppy = document.createElement("img");
+        puppy.src = "../assets/attila.jpg"; // This triggers a Network request
+        puppy.alt = "A cute puppy";
 
-        kitty.onload = () => console.log("Kitty loaded successfully!");
-        kitty.onerror = () => {
+        puppy.onload = () => console.log("Puppy loaded successfully!");
+        puppy.onerror = () => {
           console.error(
             "%cLine !: Network Error!",
             "color: red; font-weight: bold;",
@@ -157,11 +157,11 @@
             "color: red;",
           );
           alert(
-            "Check the Network Tab! kitty.webp failed to load because it's missing locally.",
+            "Check the Network Tab! attila.jpg failed to load because it's missing locally.",
           );
         };
 
-        container.appendChild(kitty);
+        container.appendChild(puppy);
       });
 
       console.log("--- Lab Initialized ---");

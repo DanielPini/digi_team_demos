@@ -51,7 +51,7 @@ button:hover {
 .hidden {
   display: none;
 }
-#kitty-container {
+#puppy-container {
   text-align: center;
   margin-top: 20px;
 }
@@ -76,7 +76,7 @@ input[type="text"] {
   padding: 8px;
   width: 250px;
 }
-.kitty {
+.puppy {
   display: block;
   margin: 20px;
   border: 5px solid lawngreen;
