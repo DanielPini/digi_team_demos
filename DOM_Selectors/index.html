@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Learn to query the DOM using getElementById, getElementsByTagName, querySelector, and querySelectorAll."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://danielpini.github.io/digi_team_demos/DOM_Selectors"
+    />
+    <meta property="og:title" content="DOM Selectors Lab" />
+    <meta property="og:img" content="../assets/attila.jpg" />
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      rel="shortcut icon"
+      href='data:image/svg+xml;utf8,&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35"&gt; &lt;style&gt; rect { fill: %231A1A1A; stroke: %231A1A1A; stroke-width: 3px; } @media (prefers-color-scheme: dark) { rect { stroke: %231A1A1A; } } &lt;/style&gt; &lt;rect x="1.5" y="1.5" width="32" height="32" rx="6" ry="6"/&gt; &lt;/svg&gt;'
+      type="image/x-icon"
+    />
+    <title>DOM Selectors Lab</title>
+    <style>
+      .lab-container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      .lab-grid {
+        display: grid;
+        grid-template-columns: 300px 1fr 300px;
+        gap: 1.25rem;
+        align-items: start;
+        margin-top: 1.25rem;
+      }
+      .col-header {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #888;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #e0e0e0;
+      }
+
+      /* Method cards */
+      .method-card {
+        background: white;
+        border-radius: 8px;
+        padding: 0.875rem 1rem;
+        margin-bottom: 0.875rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .method-row {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        font-family: "Courier New", monospace;
+        font-size: 0.8rem;
+        gap: 0;
+        line-height: 2;
+      }
+      .method-prefix {
+        white-space: nowrap;
+        color: #555;
+      }
+      .method-name {
+        color: #0055cc;
+        font-weight: 600;
+      }
+      .method-suffix {
+        color: #555;
+      }
+      .method-row input[type="text"] {
+        border: none !important;
+        border-bottom: 2px solid #ccc !important;
+        outline: none;
+        font-family: "Courier New", monospace;
+        font-size: 0.8rem;
+        padding: 0 4px !important;
+        width: auto !important;
+        min-width: 40px;
+        flex: 1;
+        background: transparent;
+        color: #c0392b;
+        transition: border-color 0.15s;
+      }
+      .method-row input[type="text"]:focus {
+        border-bottom-color: #0055cc !important;
+      }
+      .method-desc {
+        font-size: 0.72rem;
+        color: #999;
+        margin: 0.35rem 0 0.2rem;
+        line-height: 1.4;
+      }
+      .method-hints {
+        font-size: 0.68rem;
+        color: #bbb;
+        font-family: "Courier New", monospace;
+        margin-top: 0.2rem;
+      }
+      .result-line {
+        font-size: 0.72rem;
+        font-family: "Courier New", monospace;
+        color: #0055cc;
+        margin-top: 0.3rem;
+        min-height: 1em;
+      }
+      .result-line.no-match {
+        color: #cc5500;
+      }
+
+      /* Browser window */
+      .browser-window {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        background: white;
+      }
+      .browser-chrome {
+        background: #e8e8e8;
+        padding: 7px 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid #d0d0d0;
+      }
+      .browser-dots {
+        display: flex;
+        gap: 5px;
+        flex-shrink: 0;
+      }
+      .browser-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .dot-red { background: #ff5f57; }
+      .dot-yellow { background: #febc2e; }
+      .dot-green { background: #28c840; }
+      .browser-url {
+        background: white;
+        border-radius: 4px;
+        padding: 2px 8px;
+        font-size: 0.72rem;
+        color: #666;
+        flex: 1;
+        font-family: "Courier New", monospace;
+      }
+      .browser-content {
+        padding: 14px;
+        font-size: 0.82rem;
+        line-height: 1.5;
+      }
+
+      /* Mockup webpage elements */
+      #webpage-mockup h1 {
+        font-size: 1.1rem;
+        margin: 0 0 8px;
+        color: #1a1a1a;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 6px;
+      }
+      #webpage-mockup nav {
+        background: #1a1a1a;
+        padding: 6px 10px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        display: flex;
+        gap: 12px;
+      }
+      #webpage-mockup nav a {
+        color: #ddd;
+        font-size: 0.75rem;
+        text-decoration: none;
+        cursor: default;
+      }
+      #webpage-mockup .card {
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 9px 11px;
+        margin-bottom: 9px;
+        box-shadow: none;
+        background: #fafafa;
+      }
+      #webpage-mockup h2 {
+        font-size: 0.88rem;
+        margin: 0 0 4px;
+        color: #222;
+      }
+      #webpage-mockup p {
+        font-size: 0.75rem;
+        margin: 0 0 7px;
+        color: #555;
+      }
+      #webpage-mockup span.tag {
+        display: inline-block;
+        background: #eef0fb;
+        border-radius: 3px;
+        padding: 1px 7px;
+        font-size: 0.65rem;
+        color: #334;
+        margin-right: 4px;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+      }
+      #webpage-mockup footer {
+        border-top: 1px solid #eee;
+        padding-top: 8px;
+        margin-top: 4px;
+      }
+      #webpage-mockup footer p {
+        font-size: 0.7rem;
+        color: #aaa;
+        margin: 0;
+      }
+
+      /* Highlight state */
+      .highlighted {
+        background-color: #ffff00 !important;
+        color: #000 !important;
+        outline: 2px solid #e6a817;
+        border-radius: 2px;
+      }
+
+      /* Code panel */
+      .code-panel {
+        background: #1e1e2e;
+        border-radius: 8px;
+        overflow: auto;
+        max-height: 460px;
+      }
+      .code-panel pre {
+        margin: 0;
+        padding: 1rem;
+        font-size: 0.72rem;
+        line-height: 1.7;
+        color: #cdd6f4;
+        font-family: "Courier New", monospace;
+        white-space: pre;
+      }
+      .hl-tag { color: #89b4fa; }
+      .hl-attr { color: #fab387; }
+      .hl-val { color: #a6e3a1; }
+
+      @media (max-width: 960px) {
+        .lab-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>DOM Selectors</h1>
+      <p>Find any element on the page with JavaScript</p>
+    </div>
+
+    <div class="lab-container">
+      <div class="container" style="max-width: 100%; padding: 2rem 0 0">
+        <button style="margin-bottom: 1.5rem" onclick="window.location = '../'">
+          ← Home
+        </button>
+
+        <div class="step">
+          <h2>Querying the DOM</h2>
+          <p>
+            Every element on a webpage lives inside the
+            <code>document</code> object. JavaScript gives you four built-in
+            methods to find them — each with different behaviour and a
+            different return type.
+          </p>
+          <p>
+            <strong>Try it:</strong> Type into any field below. The matching
+            elements in the preview will light up yellow. You can also open
+            your console and run these methods on <em>this</em> page!
+          </p>
+        </div>
+      </div>
+
+      <div class="lab-grid">
+        <!-- Column 1: Method inputs -->
+        <div>
+          <div class="col-header">Methods</div>
+
+          <div class="method-card">
+            <div class="method-row">
+              <span class="method-prefix"
+                >document.<span class="method-name">getElementById</span>(</span
+              ><input
+                type="text"
+                id="input-by-id"
+                placeholder="main-title"
+                autocomplete="off"
+                spellcheck="false"
+              /><span class="method-suffix">)</span>
+            </div>
+            <p class="method-desc">
+              Returns a <strong>single element</strong> by its
+              <code>id</code>. Returns <code>null</code> if not found. IDs
+              must be unique.
+            </p>
+            <p class="method-hints">Try: main-title &nbsp;·&nbsp; site-nav &nbsp;·&nbsp; page-footer</p>
+            <p class="result-line" id="result-by-id"></p>
+          </div>
+
+          <div class="method-card">
+            <div class="method-row">
+              <span class="method-prefix"
+                >document.<span class="method-name"
+                  >getElementsByTagName</span
+                >(</span
+              ><input
+                type="text"
+                id="input-by-tag"
+                placeholder="p"
+                autocomplete="off"
+                spellcheck="false"
+              /><span class="method-suffix">)</span>
+            </div>
+            <p class="method-desc">
+              Returns a live <strong>HTMLCollection</strong> of every element
+              with that tag name.
+            </p>
+            <p class="method-hints">Try: p &nbsp;·&nbsp; span &nbsp;·&nbsp; div &nbsp;·&nbsp; a &nbsp;·&nbsp; h2</p>
+            <p class="result-line" id="result-by-tag"></p>
+          </div>
+
+          <div class="method-card">
+            <div class="method-row">
+              <span class="method-prefix"
+                >document.<span class="method-name">querySelector</span>(</span
+              ><input
+                type="text"
+                id="input-qs"
+                placeholder=".card-title"
+                autocomplete="off"
+                spellcheck="false"
+              /><span class="method-suffix">)</span>
+            </div>
+            <p class="method-desc">
+              Returns the <strong>first</strong> element that matches any
+              CSS selector. Returns <code>null</code> if none match.
+            </p>
+            <p class="method-hints">Try: .card &nbsp;·&nbsp; #main-title &nbsp;·&nbsp; h2</p>
+            <p class="result-line" id="result-qs"></p>
+          </div>
+
+          <div class="method-card">
+            <div class="method-row">
+              <span class="method-prefix"
+                >document.<span class="method-name">querySelectorAll</span>(</span
+              ><input
+                type="text"
+                id="input-qsa"
+                placeholder=".tag"
+                autocomplete="off"
+                spellcheck="false"
+              /><span class="method-suffix">)</span>
+            </div>
+            <p class="method-desc">
+              Returns a static <strong>NodeList</strong> of
+              <em>all</em> elements matching a CSS selector.
+            </p>
+            <p class="method-hints">Try: .tag &nbsp;·&nbsp; .body-text &nbsp;·&nbsp; div.card &nbsp;·&nbsp; p</p>
+            <p class="result-line" id="result-qsa"></p>
+          </div>
+        </div>
+
+        <!-- Column 2: Webpage preview -->
+        <div>
+          <div class="col-header">Webpage Preview</div>
+          <div class="browser-window">
+            <div class="browser-chrome">
+              <div class="browser-dots">
+                <div class="browser-dot dot-red"></div>
+                <div class="browser-dot dot-yellow"></div>
+                <div class="browser-dot dot-green"></div>
+              </div>
+              <div class="browser-url">daily-digest.example</div>
+            </div>
+            <div class="browser-content" id="webpage-mockup">
+              <h1 id="main-title">The Daily Digest</h1>
+              <nav id="site-nav">
+                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="#">Articles</a>
+                <a class="nav-link" href="#">About</a>
+              </nav>
+              <div class="card">
+                <h2 class="card-title">Breaking News</h2>
+                <p class="body-text">
+                  Scientists discover clean energy from ocean waves.
+                </p>
+                <span class="tag">Science</span>
+                <span class="tag">Featured</span>
+              </div>
+              <div class="card">
+                <h2 class="card-title">Tech Update</h2>
+                <p class="body-text">
+                  A new JS framework has taken the dev world by storm.
+                </p>
+                <span class="tag">Tech</span>
+              </div>
+              <footer id="page-footer">
+                <p class="footer-text">© 2026 The Daily Digest</p>
+              </footer>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: Source code -->
+        <div>
+          <div class="col-header">Page Source</div>
+          <div class="code-panel">
+            <pre id="code-pre"></pre>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin: 2rem 0"></div>
+    </div>
+
+    <footer style="text-align: center"><p>&copy;2026 Daniel Pini</p></footer>
+
+    <script>
+      const mockup = document.getElementById("webpage-mockup");
+
+      // ── Syntax highlighter ──────────────────────────────────────────────
+      function colorizeTag(raw) {
+        const isClose = raw.startsWith("</");
+        let inner = raw.slice(1, -1);
+        if (isClose) inner = inner.slice(1);
+
+        const nameMatch = inner.match(/^([\w-]+)(.*)/s);
+        if (!nameMatch) return escHtml(raw);
+
+        const name = nameMatch[1];
+        let rest = nameMatch[2] || "";
+
+        rest = rest.replace(
+          /\s+([\w-]+)="([^"]*)"/g,
+          (_, a, v) =>
+            ` <span class="hl-attr">${a}</span>=<span class="hl-val">"${v}"</span>`
+        );
+
+        const slash = isClose ? "/" : "";
+        return `&lt;<span class="hl-tag">${slash}${name}</span>${rest}&gt;`;
+      }
+
+      function escHtml(s) {
+        return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+
+      function syntaxHighlight(src) {
+        const parts = [];
+        let i = 0;
+        while (i < src.length) {
+          if (src[i] === "<") {
+            const end = src.indexOf(">", i);
+            if (end === -1) { parts.push(escHtml(src.slice(i))); break; }
+            parts.push(colorizeTag(src.slice(i, end + 1)));
+            i = end + 1;
+          } else {
+            const j = src.indexOf("<", i);
+            const limit = j === -1 ? src.length : j;
+            parts.push(escHtml(src.slice(i, limit)));
+            i = limit;
+          }
+        }
+        return parts.join("");
+      }
+
+      const pageSource = `<h1 id="main-title">The Daily Digest</h1>
+
+<nav id="site-nav">
+  <a class="nav-link">Home</a>
+  <a class="nav-link">Articles</a>
+  <a class="nav-link">About</a>
+</nav>
+
+<div class="card">
+  <h2 class="card-title">Breaking News</h2>
+  <p class="body-text">
+    Scientists discover clean energy
+    from ocean waves.
+  </p>
+  <span class="tag">Science</span>
+  <span class="tag">Featured</span>
+</div>
+
+<div class="card">
+  <h2 class="card-title">Tech Update</h2>
+  <p class="body-text">
+    A new JS framework has taken
+    the dev world by storm.
+  </p>
+  <span class="tag">Tech</span>
+</div>
+
+<footer id="page-footer">
+  <p class="footer-text">
+    © 2026 The Daily Digest
+  </p>
+</footer>`;
+
+      document.getElementById("code-pre").innerHTML =
+        syntaxHighlight(pageSource);
+
+      // ── Selector logic ──────────────────────────────────────────────────
+      function clearHighlights() {
+        mockup
+          .querySelectorAll(".highlighted")
+          .forEach((el) => el.classList.remove("highlighted"));
+      }
+
+      function setResult(id, text, noMatch) {
+        const el = document.getElementById(id);
+        el.textContent = text;
+        el.className = "result-line" + (noMatch ? " no-match" : "");
+      }
+
+      document.getElementById("input-by-id").addEventListener("input", function () {
+        clearHighlights();
+        const val = this.value.trim();
+        if (!val) { setResult("result-by-id", ""); return; }
+        const found = mockup.querySelector("#" + CSS.escape(val));
+        if (found) {
+          found.classList.add("highlighted");
+          setResult("result-by-id", `→ <${found.tagName.toLowerCase()}>`);
+        } else {
+          setResult("result-by-id", "→ null", true);
+        }
+      });
+
+      document.getElementById("input-by-tag").addEventListener("input", function () {
+        clearHighlights();
+        const val = this.value.trim();
+        if (!val) { setResult("result-by-tag", ""); return; }
+        const list = mockup.getElementsByTagName(val);
+        Array.from(list).forEach((el) => el.classList.add("highlighted"));
+        if (list.length) {
+          setResult("result-by-tag", `→ HTMLCollection(${list.length})`);
+        } else {
+          setResult("result-by-tag", "→ HTMLCollection(0)", true);
+        }
+      });
+
+      document.getElementById("input-qs").addEventListener("input", function () {
+        clearHighlights();
+        const val = this.value.trim();
+        if (!val) { setResult("result-qs", ""); return; }
+        try {
+          const found = mockup.querySelector(val);
+          if (found) {
+            found.classList.add("highlighted");
+            setResult("result-qs", `→ first <${found.tagName.toLowerCase()}>`);
+          } else {
+            setResult("result-qs", "→ null", true);
+          }
+        } catch {
+          setResult("result-qs", "→ invalid selector", true);
+        }
+      });
+
+      document.getElementById("input-qsa").addEventListener("input", function () {
+        clearHighlights();
+        const val = this.value.trim();
+        if (!val) { setResult("result-qsa", ""); return; }
+        try {
+          const list = mockup.querySelectorAll(val);
+          list.forEach((el) => el.classList.add("highlighted"));
+          if (list.length) {
+            setResult("result-qsa", `→ NodeList(${list.length})`);
+          } else {
+            setResult("result-qsa", "→ NodeList(0)", true);
+          }
+        } catch {
+          setResult("result-qsa", "→ invalid selector", true);
+        }
+      });
+
+      console.log("--- DOM Selectors Lab ---");
+      console.log("The mockup webpage is inside: document.getElementById('webpage-mockup')");
+      console.log("Try running the four methods on this page too!");
+    </script>
+  </body>
+</html>
